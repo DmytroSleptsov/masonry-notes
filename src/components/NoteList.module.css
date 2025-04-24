@@ -1,0 +1,29 @@
+.masonry {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    row-gap: 10px;
+    height: 100px;
+}
+
+.masonryItem {
+    width: calc(100% / 3 - 10px);
+    box-sizing: border-box;
+}
+
+.placeholder{
+    width: calc(100% / 3 - 10px);
+    margin:0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.masonry::before,
+.masonry::after {
+    content: '';
+    flex-basis: 100%;
+    margin: 0;
+    padding: 0;
+    width: 1px;
+    order: 2;
+}

@@ -1,0 +1,33 @@
+.noteItem {
+    border: 1px solid lightgrey;
+    background-color: aqua;
+    border-radius: 10px;
+    padding: 10px;
+    padding-top: 25px;
+    box-shadow: 2px 2px 2px grey;
+    transition: 0.3s;
+    break-inside: avoid;
+    position: relative;
+    cursor: pointer;
+}
+
+.noteItem:hover {
+    filter: grayscale(80%);
+}
+
+.noteTitle,
+.noteText {
+    word-wrap: break-word;
+}
+
+.deleteButton {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.deleteButton:hover {
+    transform: scale(1.3);
+}

@@ -1,0 +1,50 @@
+.content {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    width: 500px;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: aqua;
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.titleInput {
+    background-color: aqua;
+    flex-basis: 30px;
+    font-weight: bold;
+    font-size: 1.2em;
+    border: 0;
+    outline: 0;
+    border-bottom: 1px solid grey;
+}
+
+.textarea {
+    background-color: aqua;
+    border: 1px solid grey;
+    border-radius: 5px;
+    box-sizing: border-box;
+    resize: none;
+    overflow: hidden;
+    font-size: 1em;
+    font-family: Arial, Helvetica, sans-serif;
+    outline: 0;
+    min-height: 100px;
+}
+
+.saveButton {
+    align-self: flex-end;
+    flex-basis: 40px;
+    width: 100px;
+    border-radius: 10px;
+    border: 1px solid grey;
+    font-size: 20px;
+    cursor: pointer;
+    color: grey;
+    transition: 0.5s;
+    background-color: aqua;
+}
+
+.saveButton:hover {
+    background-color: lightgray;
+}
