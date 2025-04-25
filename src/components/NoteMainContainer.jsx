@@ -16,7 +16,6 @@ const NoteMainContainer = () => {
     const [findString, setFindString] = useState('');
 
     useEffect(() => {
-        filterNotes(findString);
         localStorage.setItem('notes', JSON.stringify(notes));
     }, [notes]);
 
