@@ -4,31 +4,33 @@ import styles from "./NoteList.module.css";
 import { AnimatePresence, motion } from "framer-motion";
 import UpdateNoteModal from "./UpdateNoteModal";
 
-const NoteList = ({ notes, deleteNote, changeProp, getIsUpdatedNote, setUpdatedNoteId }) => {
+const NoteList = ({ notes, filteredNotes, deleteNote, changeProp, getIsUpdatedNote, setUpdatedNoteId }) => {
     const [modalActive, setModalActive] = useState(false);
     const [updatedNote, setUpdatedNote] = useState(null);
     const notesListRef = useRef(null);
 
     useEffect(() => {
-        if (notes.length === 0) {
+        if (filteredNotes.length === 0) {
             return;
         }
 
         let columnLengths = [0, 0, 0];
         let masonry = notesListRef.current;
-        let noteIds = notes.map(note => note.id);
+        let noteIds = filteredNotes.map(note => note.id);
         let noteItems = Array.from(masonry.querySelectorAll(`.${styles.masonryItem}`))
-        let deletedElement = noteItems
-            .find(note => !note.classList.contains(styles.placeholder)
+        let deletedElements = noteItems
+            .filter(note => !note.classList.contains(styles.placeholder)
                 && !noteIds.some(id => id === note.dataset.id));
 
-        if (deletedElement) {
-            deletedElement.style.top = `${deletedElement.offsetTop}px`;
-            deletedElement.style.left = `${deletedElement.offsetLeft}px`;
-            deletedElement.style.width = `${deletedElement.offsetWidth}px`;
-            deletedElement.style.height = `${deletedElement.offsetHeight}px`;
-            deletedElement.style.zIndex = 1;
-            deletedElement.style.position = 'absolute';
+        if (deletedElements) {
+            deletedElements.forEach(element => {
+                element.style.top = `${element.offsetTop}px`;
+                element.style.left = `${element.offsetLeft}px`;
+                element.style.width = `${element.offsetWidth}px`;
+                element.style.height = `${element.offsetHeight}px`;
+                element.style.zIndex = 1;
+                element.style.position = 'absolute';
+            })
         }
 
         let filteredNoteItems = noteItems.filter(note =>
@@ -50,7 +52,7 @@ const NoteList = ({ notes, deleteNote, changeProp, getIsUpdatedNote, setUpdatedN
         });
 
         masonry.style.minHeight = `${Math.max(...columnLengths)}px`;
-    }, [notes]);
+    }, [filteredNotes]);
 
     let noteList =
         <div
@@ -58,7 +60,7 @@ const NoteList = ({ notes, deleteNote, changeProp, getIsUpdatedNote, setUpdatedN
             ref={notesListRef}>
             <AnimatePresence >
                 {
-                    notes.map((note) =>
+                    filteredNotes.map((note) =>
                         <motion.div
                             key={note.id}
                             data-id={note.id}
