@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./AddNoteForm.module.css";
 import { motion } from "framer-motion";
 
@@ -6,19 +6,29 @@ const AddNoteForm = ({ addNote, isCreatingMode, setIsCreatingMode }) => {
     const [newNoteTitle, setNewNoteTitle] = useState('');
     const [newNoteText, setNewNoteText] = useState('');
 
+    useEffect(() => {
+        if (!isCreatingMode) {
+            clearForm();
+        }
+    }, [isCreatingMode])
+
     function saveNote() {
         if (!newNoteTitle && !newNoteText) {
             return;
         }
 
         addNote(newNoteTitle, newNoteText);
-        setNewNoteTitle('');
-        setNewNoteText('');
+        clearForm();
         setIsCreatingMode(false);
     }
 
     function setAutoHeight(element) {
         element.style.height = element.scrollHeight + 'px';
+    }
+
+    function clearForm() {
+        setNewNoteTitle('');
+        setNewNoteText('');
     }
 
     return (

@@ -4,7 +4,7 @@ import styles from "./NoteList.module.css";
 import { AnimatePresence, motion } from "framer-motion";
 import UpdateNoteModal from "./UpdateNoteModal";
 
-const NoteList = ({ notes, filteredNotes, deleteNote, changeProp, getIsUpdatedNote, setUpdatedNoteId }) => {
+const NoteList = ({ filteredNotes, deleteNote, changeProp, getIsUpdatedNote, setUpdatedNoteId, searchString }) => {
     const [modalActive, setModalActive] = useState(false);
     const [updatedNote, setUpdatedNote] = useState(null);
     const notesListRef = useRef(null);
@@ -80,7 +80,8 @@ const NoteList = ({ notes, filteredNotes, deleteNote, changeProp, getIsUpdatedNo
                                 deleteNote={deleteNote}
                                 changeProp={changeProp}
                                 getIsUpdatedNote={getIsUpdatedNote}
-                                setUpdatedNoteId={setUpdatedNoteId} />
+                                setUpdatedNoteId={setUpdatedNoteId}
+                                searchString={searchString} />
                         </motion.div>
                     )
                 }

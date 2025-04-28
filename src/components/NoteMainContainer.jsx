@@ -16,6 +16,7 @@ const NoteMainContainer = () => {
     const [findString, setFindString] = useState('');
 
     useEffect(() => {
+        filterNotes(findString);
         localStorage.setItem('notes', JSON.stringify(notes));
     }, [notes]);
 
@@ -39,7 +40,7 @@ const NoteMainContainer = () => {
     function changeProp(id, prop, value) {
         let updatedNotes = cloneNotes();
         updatedNotes.forEach(note => {
-            if (note.id === id && note[prop] != value) {
+            if (note.id === id && note[prop] !== value) {
                 note[prop] = value;
             }
         });
@@ -54,13 +55,27 @@ const NoteMainContainer = () => {
     function filterNotes(findString) {
         if (!findString) {
             setFilteredNotes(cloneNotes());
+            return;
         }
+
         let filteredNotes = notes.filter(note =>
-            note.title.toLowerCase().includes(findString.toLowerCase().trim()) ||
-            note.text.toLowerCase().includes(findString.toLowerCase().trim())
+            isNoteIncludingString(note, findString)
         );
 
         setFilteredNotes(filteredNotes);
+    }
+
+    function isNoteIncludingString(note, str) {
+        return (
+            isTextIncludesString(note.title, str) ||
+            isTextIncludesString(note.text, str)
+        );
+    }
+
+    function isTextIncludesString(text, str) {
+        return text
+            .toLowerCase()
+            .includes(str.toLowerCase().trim());
     }
 
     return (
@@ -91,7 +106,8 @@ const NoteMainContainer = () => {
                     deleteNote={deleteNote}
                     changeProp={changeProp}
                     getIsUpdatedNote={getIsUpdatedNote}
-                    setUpdatedNoteId={setUpdatedNoteId} />
+                    setUpdatedNoteId={setUpdatedNoteId}
+                    searchString={findString.toLowerCase()} />
             </div>
         </div>
     );
