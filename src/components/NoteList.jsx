@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import NoteItem from "./NoteItem";
 import styles from "./NoteList.module.css";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import UpdateNoteModal from "./UpdateNoteModal";
 
-const NoteList = ({ filteredNotes, deleteNote, changeProp, getIsUpdatedNote, setUpdatedNoteId, searchString }) => {
+const NoteList = ({ filteredNotes, deleteNote, changeProp, changeIsPinnedNote, searchString }) => {
     const [modalActive, setModalActive] = useState(false);
     const [updatedNote, setUpdatedNote] = useState(null);
     const notesListRef = useRef(null);
@@ -55,10 +55,11 @@ const NoteList = ({ filteredNotes, deleteNote, changeProp, getIsUpdatedNote, set
     }, [filteredNotes]);
 
     let noteList =
+
         <div
             className={styles.masonry}
             ref={notesListRef}>
-            <AnimatePresence >
+            <AnimatePresence>
                 {
                     filteredNotes.map((note) =>
                         <motion.div
@@ -70,6 +71,7 @@ const NoteList = ({ filteredNotes, deleteNote, changeProp, getIsUpdatedNote, set
                             transition={{ duration: 0.2 }}
                             className={styles.masonryItem}
                             layout="position"
+                            layoutId={note.id}
                             onClick={() => {
                                 setModalActive(true);
                                 setUpdatedNote(note);
@@ -78,9 +80,7 @@ const NoteList = ({ filteredNotes, deleteNote, changeProp, getIsUpdatedNote, set
                                 key={note.id}
                                 note={note}
                                 deleteNote={deleteNote}
-                                changeProp={changeProp}
-                                getIsUpdatedNote={getIsUpdatedNote}
-                                setUpdatedNoteId={setUpdatedNoteId}
+                                changeIsPinnedNote={changeIsPinnedNote}
                                 searchString={searchString} />
                         </motion.div>
                     )
@@ -88,8 +88,9 @@ const NoteList = ({ filteredNotes, deleteNote, changeProp, getIsUpdatedNote, set
                 <div key={'placeholder1'} className={styles.placeholder}></div>
                 <div key={'placeholder2'} className={styles.placeholder}></div>
                 <div key={'placeholder3'} className={styles.placeholder}></div>
-            </AnimatePresence >
+            </AnimatePresence>
         </div>
+
 
     return (
         <div>

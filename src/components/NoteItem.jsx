@@ -1,6 +1,7 @@
 import styles from "./NoteItem.module.css";
+import uuid from "react-uuid";
 
-const NoteItem = ({ note, deleteNote, searchString }) => {
+const NoteItem = ({ note, deleteNote, changeProp, searchString, changeIsPinnedNote }) => {
     const christ = "\u274C"
 
     function getTextSpans(text) {
@@ -25,6 +26,7 @@ const NoteItem = ({ note, deleteNote, searchString }) => {
 
         array.push(
             <span
+                key={uuid()}
                 className={isSelect
                     ? styles.searchString
                     : ''}>
@@ -54,6 +56,13 @@ const NoteItem = ({ note, deleteNote, searchString }) => {
                 className={styles.deleteButton}>
                 {christ}
             </a>
+            <button
+                onClick={event => {
+                    event.stopPropagation();
+                    changeIsPinnedNote(note.id)
+                }}>
+                {note.isPinned ? 'Unpin' : 'Pin'}
+            </button>
         </div >
     );
 }
