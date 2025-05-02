@@ -16,14 +16,15 @@ const NoteList = ({ filteredNotes, deleteNote, changeProp, changeIsPinnedNote, s
 
         let columnLengths = [0, 0, 0];
         let masonry = notesListRef.current;
-        let noteIds = filteredNotes.map(note => note.id);
+        let filteredNoteIds = filteredNotes.map(note => note.id);
         let noteItems = Array.from(masonry.querySelectorAll(`.${styles.masonryItem}`))
         let deletedElements = noteItems
             .filter(note => !note.classList.contains(styles.placeholder)
-                && !noteIds.some(id => id === note.dataset.id));
+                && !filteredNoteIds.some(id => id === note.dataset.id));
 
         if (deletedElements) {
             deletedElements.forEach(element => {
+                console.log("offsetTop", element.offsetTop);
                 element.style.top = `${element.offsetTop}px`;
                 element.style.left = `${element.offsetLeft}px`;
                 element.style.width = `${element.offsetWidth}px`;
@@ -34,7 +35,7 @@ const NoteList = ({ filteredNotes, deleteNote, changeProp, changeIsPinnedNote, s
         }
 
         let filteredNoteItems = noteItems.filter(note =>
-            noteIds.some(id => id === note.dataset.id || note.classList.contains(styles.placeholder))
+            filteredNoteIds.some(id => id === note.dataset.id || note.classList.contains(styles.placeholder))
         );
         let rowGap = parseFloat(getComputedStyle(masonry).getPropertyValue('row-gap'));
 
@@ -52,10 +53,10 @@ const NoteList = ({ filteredNotes, deleteNote, changeProp, changeIsPinnedNote, s
         });
 
         masonry.style.minHeight = `${Math.max(...columnLengths)}px`;
+
     }, [filteredNotes]);
 
     let noteList =
-
         <div
             className={styles.masonry}
             ref={notesListRef}>
@@ -90,7 +91,6 @@ const NoteList = ({ filteredNotes, deleteNote, changeProp, changeIsPinnedNote, s
                 <div key={'placeholder3'} className={styles.placeholder}></div>
             </AnimatePresence>
         </div>
-
 
     return (
         <div>

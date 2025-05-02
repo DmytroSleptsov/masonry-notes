@@ -1,29 +1,14 @@
-.tempFlex {
-    width: 800px;
-    height: 800px;
-    border: 1px solid black;
-
+.div1 {
     display: flex;
-    flex-direction: row;
+    height: 400px;
+    margin: 100px;
+    border: 2px solid red;
 }
 
-.tempElement {
-    border: 1px solid blue;
-    box-sizing: border-box;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex: 0 0 1px;
-}
-
-.tempElement:nth-child(1) {
-   flex: 1 30px;
-}
-
-.tempElement:nth-child(2n) {
-
-}
-
-.tempElement:nth-child(3n) {
-
+.div2 {
+    height: 100px;
+    width: 100px;
+    border: 2px solid blue;
+    position: absolute;
+    
 }

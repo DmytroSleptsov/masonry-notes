@@ -11,13 +11,14 @@ function id() {
 
 const NoteMainContainer = () => {
     const [notes, setNotes] = useState(JSON.parse(localStorage.getItem('notes')) || []);
-    const [filteredNotes, setFilteredNotes] = useState(cloneNotes());
     const [isCreatingMode, setIsCreatingMode] = useState(false);
     const [findString, setFindString] = useState('');
 
+    let filteredNotes = filterNotes();
     let isSomePinnedNotes = filteredNotes.some(note => note.isPinned);
 
     useEffect(() => {
+        filteredNotes = filterNotes();
         localStorage.setItem('notes', JSON.stringify(notes));
     }, [notes]);
 
@@ -33,12 +34,10 @@ const NoteMainContainer = () => {
             isPinned: false
         };
 
-        setFilteredNotes([newNote, ...filteredNotes])
         setNotes([newNote, ...notes]);
     }
 
     function deleteNote(id) {
-        setFilteredNotes(filteredNotes.filter(note => note.id !== id));
         setNotes(notes.filter(note => note.id !== id));
     }
 
@@ -54,30 +53,26 @@ const NoteMainContainer = () => {
     }
 
     function changeIsPinnedNote(id) {
-        let changedNote;
-        let updatedFilteredNotes = [...filteredNotes];
-        updatedFilteredNotes.forEach(note => {
+        let changedNote = {};
+        let updatedNotes = cloneNotes();
+        updatedNotes.forEach(note => {
             if (note.id === id) {
-                note.isPinned = !note.isPinned;
-                changedNote = note;
+                changedNote = { ...note };
+                changedNote.isPinned = !changedNote.isPinned;
             }
         });
 
-        setFilteredNotes([changedNote, ...filteredNotes.filter(note => note.id !== id)]);
-        setNotes([changedNote, ...notes.filter(note => note.id !== id)]);
+        setNotes([changedNote, ...(updatedNotes.filter(note => note.id !== id))]);
     }
 
-    function filterNotes(findString) {
+    function filterNotes() {
         if (!findString) {
-            setFilteredNotes(cloneNotes());
-            return;
+            return cloneNotes();
         }
 
-        let filteredNotes = notes.filter(note =>
+        return notes.filter(note =>
             isNoteIncludingString(note, findString)
         );
-
-        setFilteredNotes(filteredNotes);
     }
 
     function isNoteIncludingString(note, str) {
@@ -106,7 +101,6 @@ const NoteMainContainer = () => {
                     value={findString}
                     onChange={event => {
                         setFindString(event.target.value)
-                        filterNotes(event.target.value);
                     }} />
                 {
                     !findString &&
@@ -118,35 +112,45 @@ const NoteMainContainer = () => {
                 <AnimatePresence>
                     {
                         isSomePinnedNotes &&
-                        <motion.div
-                            className={styles.pinnedNotesContainer}
-                            layout
-                            transition={{ duration: 0.2 }}>
+                        <div
+                            key="pinned"
+                            className={styles.pinnedNotesContainer}>
                             <motion.p
                                 className={styles.notesListTitle}
-                                layout
-                                transition={{ duration: 0.2 }}>
+                                transition={{ duration: 0.2 }}
+                                layout>
                                 PINNED
                             </motion.p>
                             <NoteList
                                 filteredNotes={filteredNotes.filter(note => note.isPinned)}
+                                allNotes={notes}
                                 deleteNote={deleteNote}
                                 changeProp={changeProp}
                                 changeIsPinnedNote={changeIsPinnedNote}
                                 searchString={findString.toLowerCase()} />
-                        </motion.div>
+                        </div>
                     }
                     {
                         (isSomePinnedNotes && filteredNotes.filter(note => !note.isPinned).length !== 0) &&
-                        <motion.p
-                            className={styles.notesListTitle}
-                            layout
-                            transition={{ duration: 0.2 }}>
-                            OTHER
-                        </motion.p>
+                        <div>
+                            <motion.div
+                                className={styles.splitLine}
+                                transition={{ duration: 0.2 }}
+                                layout>
+                            </motion.div>
+                            <motion.p
+                                className={styles.notesListTitle}
+                                transition={{ duration: 0.2 }}
+                                layout>
+                                OTHER
+                            </motion.p>
+                        </div>
                     }
                     <NoteList
+                        key="unPinned"
+
                         filteredNotes={filteredNotes.filter(note => !note.isPinned)}
+                        allNotes={notes}
                         deleteNote={deleteNote}
                         changeProp={changeProp}
                         changeIsPinnedNote={changeIsPinnedNote}

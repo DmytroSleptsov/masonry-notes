@@ -1,7 +1,7 @@
 import styles from "./NoteItem.module.css";
 import uuid from "react-uuid";
 
-const NoteItem = ({ note, deleteNote, changeProp, searchString, changeIsPinnedNote }) => {
+const NoteItem = ({ note, deleteNote, searchString, changeIsPinnedNote }) => {
     const christ = "\u274C"
 
     function getTextSpans(text) {

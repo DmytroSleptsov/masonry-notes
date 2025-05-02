@@ -37,12 +37,16 @@
     transform: scale(1.03);
 }
 
-.pinnedNotesContainer{
+.pinnedNotesContainer {
     margin-bottom: 50px;
+
+}
+
+.splitLine {
     border-bottom: 1px solid lightgray;
 }
 
-.notesListTitle{
+.notesListTitle {
     font-size: 13px;
     font-weight: bolder;
     margin-left: 30px;
