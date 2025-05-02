@@ -1,9 +1,9 @@
 import styles from "./NoteItem.module.css";
 import uuid from "react-uuid";
+import { TiPin, TiPinOutline } from "react-icons/ti";
+import { RxCross1 } from "react-icons/rx";
 
 const NoteItem = ({ note, deleteNote, searchString, changeIsPinnedNote }) => {
-    const christ = "\u274C"
-
     function getTextSpans(text) {
         let array = [];
         let index = text.toLowerCase().indexOf(searchString);
@@ -38,6 +38,31 @@ const NoteItem = ({ note, deleteNote, searchString, changeIsPinnedNote }) => {
     return (
         <div
             className={styles.noteItem}>
+            <div className={styles.buttonsContainer}>
+                <button
+                    className={styles.button}
+                    onClick={event => {
+                        event.stopPropagation();
+                        changeIsPinnedNote(note.id)
+                    }}>
+                    {
+                        note.isPinned
+                            ? <TiPin
+                                className={styles.btnIcon} />
+                            : <TiPinOutline
+                                className={styles.btnIcon} />
+                    }
+                </button>
+                <button
+                    onClick={event => {
+                        event.stopPropagation();
+                        deleteNote(note.id);
+                    }}
+                    className={styles.button}>
+                    <RxCross1
+                        className={styles.btnIcon} />
+                </button>
+            </div>
             < div >
                 <h3
                     className={styles.noteTitle}>
@@ -48,21 +73,6 @@ const NoteItem = ({ note, deleteNote, searchString, changeIsPinnedNote }) => {
                     {getTextSpans(note.text)}
                 </p>
             </div>
-            <a
-                onClick={event => {
-                    event.stopPropagation();
-                    deleteNote(note.id);
-                }}
-                className={styles.deleteButton}>
-                {christ}
-            </a>
-            <button
-                onClick={event => {
-                    event.stopPropagation();
-                    changeIsPinnedNote(note.id)
-                }}>
-                {note.isPinned ? 'Unpin' : 'Pin'}
-            </button>
         </div >
     );
 }

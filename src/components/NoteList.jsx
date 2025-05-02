@@ -10,6 +10,10 @@ const NoteList = ({ filteredNotes, deleteNote, changeProp, changeIsPinnedNote, s
     const notesListRef = useRef(null);
 
     useEffect(() => {
+        setMansoryHeight();
+    }, [filteredNotes]);
+
+    function setMansoryHeight(){
         if (filteredNotes.length === 0) {
             return;
         }
@@ -53,8 +57,7 @@ const NoteList = ({ filteredNotes, deleteNote, changeProp, changeIsPinnedNote, s
         });
 
         masonry.style.minHeight = `${Math.max(...columnLengths)}px`;
-
-    }, [filteredNotes]);
+    }
 
     let noteList =
         <div
