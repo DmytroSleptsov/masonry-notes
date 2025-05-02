@@ -1,29 +1,34 @@
 import { useEffect, useRef, useState } from "react";
 import NoteItem from "./NoteItem";
 import styles from "./NoteList.module.css";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import UpdateNoteModal from "./UpdateNoteModal";
 
-const NoteList = ({ filteredNotes, deleteNote, changeProp, getIsUpdatedNote, setUpdatedNoteId, searchString }) => {
+const NoteList = ({ filteredNotes, deleteNote, changeProp, changeIsPinnedNote, searchString }) => {
     const [modalActive, setModalActive] = useState(false);
     const [updatedNote, setUpdatedNote] = useState(null);
     const notesListRef = useRef(null);
 
     useEffect(() => {
+        setMansoryHeight();
+    }, [filteredNotes]);
+
+    function setMansoryHeight(){
         if (filteredNotes.length === 0) {
             return;
         }
 
         let columnLengths = [0, 0, 0];
         let masonry = notesListRef.current;
-        let noteIds = filteredNotes.map(note => note.id);
+        let filteredNoteIds = filteredNotes.map(note => note.id);
         let noteItems = Array.from(masonry.querySelectorAll(`.${styles.masonryItem}`))
         let deletedElements = noteItems
             .filter(note => !note.classList.contains(styles.placeholder)
-                && !noteIds.some(id => id === note.dataset.id));
+                && !filteredNoteIds.some(id => id === note.dataset.id));
 
         if (deletedElements) {
             deletedElements.forEach(element => {
+                console.log("offsetTop", element.offsetTop);
                 element.style.top = `${element.offsetTop}px`;
                 element.style.left = `${element.offsetLeft}px`;
                 element.style.width = `${element.offsetWidth}px`;
@@ -34,7 +39,7 @@ const NoteList = ({ filteredNotes, deleteNote, changeProp, getIsUpdatedNote, set
         }
 
         let filteredNoteItems = noteItems.filter(note =>
-            noteIds.some(id => id === note.dataset.id || note.classList.contains(styles.placeholder))
+            filteredNoteIds.some(id => id === note.dataset.id || note.classList.contains(styles.placeholder))
         );
         let rowGap = parseFloat(getComputedStyle(masonry).getPropertyValue('row-gap'));
 
@@ -52,13 +57,13 @@ const NoteList = ({ filteredNotes, deleteNote, changeProp, getIsUpdatedNote, set
         });
 
         masonry.style.minHeight = `${Math.max(...columnLengths)}px`;
-    }, [filteredNotes]);
+    }
 
     let noteList =
         <div
             className={styles.masonry}
             ref={notesListRef}>
-            <AnimatePresence >
+            <AnimatePresence>
                 {
                     filteredNotes.map((note) =>
                         <motion.div
@@ -70,6 +75,7 @@ const NoteList = ({ filteredNotes, deleteNote, changeProp, getIsUpdatedNote, set
                             transition={{ duration: 0.2 }}
                             className={styles.masonryItem}
                             layout="position"
+                            layoutId={note.id}
                             onClick={() => {
                                 setModalActive(true);
                                 setUpdatedNote(note);
@@ -78,9 +84,7 @@ const NoteList = ({ filteredNotes, deleteNote, changeProp, getIsUpdatedNote, set
                                 key={note.id}
                                 note={note}
                                 deleteNote={deleteNote}
-                                changeProp={changeProp}
-                                getIsUpdatedNote={getIsUpdatedNote}
-                                setUpdatedNoteId={setUpdatedNoteId}
+                                changeIsPinnedNote={changeIsPinnedNote}
                                 searchString={searchString} />
                         </motion.div>
                     )
@@ -88,7 +92,7 @@ const NoteList = ({ filteredNotes, deleteNote, changeProp, getIsUpdatedNote, set
                 <div key={'placeholder1'} className={styles.placeholder}></div>
                 <div key={'placeholder2'} className={styles.placeholder}></div>
                 <div key={'placeholder3'} className={styles.placeholder}></div>
-            </AnimatePresence >
+            </AnimatePresence>
         </div>
 
     return (
